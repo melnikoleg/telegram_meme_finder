@@ -22,8 +22,8 @@ inline_btn_1 = InlineKeyboardButton('more', callback_data='button_more')
 inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
 
 
-def get_image(search_query):
-    response = process(search_query)
+def get_image(search_query, best):
+    response = process(search_query=search_query, best=best)
     image_64_decode = base64.b64decode(response['outputs'])
     return image_64_decode
 
@@ -41,7 +41,7 @@ async def echo(message: types.Message):
     search_query = message.text
     # response = process(search_query)
     # image_64_decode = base64.b64decode(response['outputs'])
-    image_64_decode = get_image(search_query)
+    image_64_decode = get_image(search_query, best=True)
     await message.reply_photo(image_64_decode, caption=search_query, reply_markup=inline_kb1)
 
 
@@ -50,7 +50,7 @@ async def process_callback_button_more(callback_query: types.CallbackQuery):
     search_query = callback_query.message.md_text
     # response = process(search_query)
     # image_64_decode = base64.b64decode(response['outputs'])
-    image_64_decode = get_image(search_query)
+    image_64_decode = get_image(search_query=search_query, best=False)
     await callback_query.message.reply_photo(image_64_decode, caption=search_query,
                                              reply_markup=inline_kb1)
 
